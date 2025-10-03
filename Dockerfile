@@ -2,7 +2,7 @@
 FROM node
 
 # Set working directory
-WORKDIR /home/ubuntu/app
+WORKDIR /home/ubuntu/node
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
