@@ -2,7 +2,7 @@
 FROM node
 
 # Set working directory
-WORKDIR .
+WORKDIR /
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
