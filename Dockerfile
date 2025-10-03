@@ -2,7 +2,7 @@
 FROM node:18-alpine
 
 # Set working directory
-WORKDIR /home/ubuntu/node
+WORKDIR .
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
