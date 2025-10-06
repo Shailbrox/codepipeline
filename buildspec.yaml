@@ -3,23 +3,31 @@ version: 0.2
 env:
   variables:
     DOCKER_HUB_REPO: "shailbrox/cicd"
+  secrets-manager:
+    DOCKERHUB_USERNAME: Dockerhubcreds:DOCKERHUB_USERNAME
+    DOCKERHUB_PASSWORD: Dockerhubcreds:DOCKERHUB_PASSWORD
 
 phases:
   pre_build:
     commands:
       - echo Logging in to Docker Hub...
       - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
+      - IMAGE_NAME=myapp
+      - IMAGE_TAG=latest
+
   build:
     commands:
       - echo Building Docker image...
-      - docker build -t $DOCKER_HUB_REPO:latest .
-      - echo Pushing image to Docker Hub...
-      - docker push $DOCKER_HUB_REPO:latest
+      - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+
   post_build:
     commands:
-      - echo Build completed on `date`
-      - echo "Image pushed to Docker Hub successfully"
+      - echo Pushing Docker image to Docker Hub...
+      - docker tag $IMAGE_NAME:$IMAGE_TAG $DOCKERHUB_USERNAME/$IMAGE_NAME:$IMAGE_TAG
+      - docker push $DOCKERHUB_USERNAME/$IMAGE_NAME:$IMAGE_TAG
+      - echo Build and push completed successfully.
 
 artifacts:
   files:
-    - imagedefinitions.json
+    - appspec.yml
+    - scripts/**/*
